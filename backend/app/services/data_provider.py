@@ -1,0 +1,42 @@
+from app.services.ai_signal import analyze_symbol
+
+
+def get_supported_pairs() -> list[str]:
+    return ["EURUSD", "GBPUSD", "USDJPY", "AUDUSD", "USDCAD", "NZDUSD"]
+
+
+def get_market_snapshot(symbol: str) -> dict:
+    base_price = {
+        "EURUSD": 1.0854,
+        "GBPUSD": 1.2723,
+        "USDJPY": 157.89,
+        "AUDUSD": 0.6687,
+        "USDCAD": 1.3652,
+        "NZDUSD": 0.6178,
+    }
+
+    import math
+
+    base = base_price.get(symbol, 1.0)
+    phase = (abs(hash(symbol)) % 1000) / 100
+    drift = math.sin(phase) * 0.003
+    price = round(base + drift, 5 if base < 2 else 3)
+    change = round((math.sin(phase + 1.5) * 0.8), 3)
+    volume = int(1200 + (abs(math.cos(phase + 0.9)) * 15000))
+
+    return {
+        "symbol": symbol,
+        "price": price,
+        "change_percent": change,
+        "volume": volume,
+        "history": [
+            round(price + (i - 10) * 0.0008, 5 if price < 2 else 3)
+            for i in range(20)
+        ],
+    }
+
+
+def generate_market_signal(symbol: str):
+    snapshot = get_market_snapshot(symbol)
+    analysis = analyze_symbol(snapshot)
+    return analysis
