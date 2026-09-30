@@ -1,0 +1,142 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #09111d, #101d2d);
+  color: #eaf6ff;
+}
+
+* { box-sizing: border-box; }
+
+button {
+  font: inherit;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+}
+
+.sidebar {
+  width: 280px;
+  background: rgba(12, 25, 38, 0.9);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 24px 18px;
+}
+
+.sidebar h1 {
+  margin: 0 0 10px;
+  font-size: 2rem;
+}
+
+.sidebar p {
+  color: #9cc2d8;
+  margin-bottom: 24px;
+}
+
+.pair-list {
+  display: grid;
+  gap: 10px;
+}
+
+.pair {
+  background: #112334;
+  border: 1px solid transparent;
+  color: #edf8ff;
+  padding: 12px 14px;
+  border-radius: 10px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pair.active {
+  background: linear-gradient(135deg, #1c9bd6, #2dc7a0);
+  border-color: rgba(255,255,255,0.2);
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.topbar {
+  background: rgba(16, 31, 50, 0.92);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 20px 22px;
+}
+
+.badge {
+  display: inline-block;
+  background: #143a4c;
+  color: #9ee8ff;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.topbar h2 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px;
+}
+
+.card {
+  background: rgba(16, 31, 50, 0.92);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 20px;
+}
+
+.card label {
+  display: block;
+  font-size: 0.8rem;
+  color: #9cc2d8;
+  margin-bottom: 10px;
+}
+
+.card strong {
+  font-size: 1.8rem;
+}
+
+.analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.panel h3 {
+  margin-top: 0;
+}
+
+.forecast-panel {
+  line-height: 1.7;
+}
+
+.loading {
+  padding: 30px;
+  background: rgba(16, 31, 50, 0.92);
+  border-radius: 18px;
+  text-align: center;
+  color: #dceefc;
+}
+
+@media (max-width: 768px) {
+  .app-shell {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+}

@@ -1,0 +1,43 @@
+from typing import Dict, List
+
+
+def analyze_symbol(snapshot: Dict) -> Dict:
+    price = float(snapshot.get("price", 0.0))
+    change = float(snapshot.get("change_percent", 0.0))
+    volume = int(snapshot.get("volume", 0))
+    history = snapshot.get("history", [price])
+
+    trend_strength = 0.0
+    if len(history) > 1:
+        baseline = sum(history[:-1]) / max(len(history[:-1]), 1)
+        trend_strength = (price - baseline) / max(abs(baseline), 1e-6)
+
+    volume_score = 1.0 if volume > 10000 else 0.55
+    momentum_score = 1.0 if change >= 0 else 0.35
+    signal_score = 0.5 + min(abs(change) / 10, 0.3) + (0.18 if volume_score > 0.8 else 0.0) + (0.12 if trend_strength > 0 else -0.08)
+    confidence = max(0.52, min(0.95, round(signal_score, 2)))
+    bias = "buy" if change >= 0 or trend_strength >= 0 else "sell"
+
+    return {
+        "symbol": snapshot["symbol"],
+        "bias": bias,
+        "confidence": confidence,
+        "summary": (
+            f"The AI model sees a {bias.upper()} bias for {snapshot['symbol']} "
+            f"because momentum is {change:+.2f}% with volume strength {volume_score:.2f}."
+        ),
+        "entry": round(price, 5 if price < 2 else 3),
+        "stop_loss": round(price * (0.995 if bias == 'buy' else 1.005), 5 if price < 2 else 3),
+        "take_profit": round(price * (1.012 if bias == 'buy' else 0.988), 5 if price < 2 else 3),
+        "trend_strength": round(trend_strength, 4),
+    }
+
+
+def build_ai_dashboard(snapshot: Dict) -> Dict:
+    signal = analyze_symbol(snapshot)
+    return {
+        "signal": signal,
+        "market_bias": signal["bias"],
+        "ai_score": signal["confidence"],
+        "risk_label": "Moderate" if signal["confidence"] < 0.75 else "Aggressive",
+    }
